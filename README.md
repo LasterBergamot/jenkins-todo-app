@@ -1,5 +1,3 @@
-# jenkins-todo-app
-
 <h1>Jenkins for todo-app</h1>
 
 <p>This repository contains a docker-compose file to startup a Jenkins which is capable of doing the CI related jobs for the todo-app.</p>
