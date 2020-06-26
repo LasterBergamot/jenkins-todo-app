@@ -1,0 +1,36 @@
+version: "3.3"
+
+services:
+    blueocean:
+        image: jenkinsci/blueocean
+        container_name: "todo-app-jenkins"
+        networks:
+            todo-app-network:
+        environment:
+            - DOCKER_HOST=tcp://localhost:2375
+            - DOCKER_CERT_PATH=/certs/client
+            - DOCKER_TLS_VERIFY=1
+            - JENKINS_OPTS="--httpPort=8080"
+        volumes:
+            - "./jenkins/todo-app-jenkins-data:/var/jenkins_home"
+            - "./jenkins/todo-app-docker-certs:/certs/client:ro"
+        ports:
+            - "9000:8080"
+            - "50000:50000"
+
+    dind:
+        image: docker:dind
+        container_name: "todo-app-jenkins-docker"
+        privileged: true
+        networks:
+            todo-app-network:
+                aliases:
+                    - todo-app-docker
+        environment:
+            - DOCKER_TLS_CERTDIR=/certs
+        volumes:
+            - "./jenkins/todo-app-docker-certs:/certs/client"
+            - "./jenkins/todo-app-jenkins-data:/var/jenkins_home"
+
+networks:
+  todo-app-network:
